@@ -18,182 +18,94 @@ public class RestaurantWindow extends JFrame implements ActionListener{
 		
 	}
 //#################################################################################
-	import javax.swing.*;
-import java.awt.*;
+import javax.swing.*;		//Needed for Swing classes
+import java.awt.*;		//Needed for BorderLayout class
 import java.awt.event.*;
 
-public class NoteTaker extends JFrame
+public class RestaurantWindow extends JFrame
 {
-	
-	// Constants for set up of the note taking area
-	public static final int WIDTH = 600;
-	public static final int HEIGHT = 300;
-	public static final int LINES = 13;
-	public static final int CHAR_PER_LINE = 45;
-	
-	// Objects in GUI
-	private JTextArea theText; // Text area to take notes
-	private JMenuBar mBar;     // Horizontal menu bar
-	private JPanel textPanel;  // Scrolling text area panel
-	private JMenu notesMenu;   // Vertical menu for notes
-	
-	// THESE ITEMS ARE NOT YET USED
-	// YOU WILL BE CREATING THEM IN THIS LAB
-	private JMenu viewMenu; // Vertical menu for views
-	private JMenu lafMenu;  // Vertical menu look and feel
-	private JMenu sbMenu;   // Vertical menu for scroll bar
-	private JScrollPane scrolledText;   // Scroll bars
-	
-	// Default notes
-	private String note1 = "No Note 1.";
-	private String note2 = "No Note 2.";
+	final int WINDOW_WIDTH = 500;	//Window width
+	final int WINDOW_HEIGHT = 500;	//Window height
+	private JPanel panel;
+	private JLabel messageLabel;
+	private Container contentPane;
+	private JButton managerButton; 
+	private JButton customerButton;
 	
 	/**
 	 * Constructor
 	 */
 	
-	public NoteTaker() {
+	public RestaurantWindow() {
 		
-		// Create a closeable JFrame with a specific size
-		super("Note Taker");
-		setSize(WIDTH, HEIGHT);
-		setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+		//Set the title.
+		setTitle("Restaurant");
 		
-		// Get contentPane and set layout of the window
-		Container contentPane = getContentPane();
+		//Set the size of the window.
+		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+		
+		//Specify what happens when the close button is clicked.
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		//Get contentPane and set layout
+		contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 		
-		// Creates the vertical menus
-		createNotes();
-		createViews();
+		//Build the panel and add it to the frame.
+		buildPanel();
 		
-		// Creates horizontal menu bar and
-		// adds vertical menus to it
-		mBar = new JMenuBar();
-		mBar.add(notesMenu);
+		//Add the panel to the frame's content pane.
+		add(panel); //, BorderLayout.CENTER);
 		
-		// ADD THE viewMenu TO THE MENU BAR HERE
-		setJMenuBar(mBar);
+		//Create a label holding message and add to centerPane
+		//Create a label to display instruction.
+		messageLabel = new JLabel("                                          " + 
+									"This is the home window of the restaurant");
+		add(messageLabel, BorderLayout.NORTH);
 		
-		// Creates a panel to take notes on
-		textPanel = new JPanel();
-		textPanel.setBackground(Color.blue);
-		theText = new JTextArea(LINES, CHAR_PER_LINE);
-		theText.setBackground(Color.white);
-		
-		// CREATE A JScrollPane OBJECT HERE CALLED
-		// scrolledText AND PASS IN theText, THEN
-		// CHANGE THE LINE BELOW BY PASSING IN scrolledText
-		
-		textPanel.add(theText);
-		contentPane.add(textPanel, BorderLayout.CENTER);
-		
+		//Display the window.
+		setVisible(true);
+
 	}
 	
-	/**
-	 * Creates vertical menu associated with Notes
-	 * menu item on menu bar.
-	 */
-	
-	public void createNotes() {
+	private void buildPanel() {
 		
-		notesMenu = new JMenu("Notes");
-	    JMenuItem item;
-	    
-	    item = new JMenuItem("Save Note 1");
-	    item.addActionListener(new MenuListener());
-	    notesMenu.add(item);
-	    
-	    item = new JMenuItem("Save Note 2");
-	    item.addActionListener(new MenuListener());
-	    notesMenu.add(item);
-	    
-	    item = new JMenuItem("Open Note 1");
-	    item.addActionListener(new MenuListener());
-	    notesMenu.add(item);
-	    
-	    item = new JMenuItem("Open Note 2");
-	    item.addActionListener(new MenuListener());
-	    notesMenu.add(item);
-	    
-	    item = new JMenuItem("Clear");
-	    item.addActionListener(new MenuListener());
-	    notesMenu.add(item);
-	    
-	    item = new JMenuItem("Exit");
-	    item.addActionListener(new MenuListener());
-	    notesMenu.add(item);
+		//Create two buttons
+		managerButton = new JButton("Manager Window");
+		managerButton.setActionCommand("manager");
+		managerButton.addActionListener(new ButtonListener());
+
+		
+		customerButton = new JButton("Customer Window");
+		customerButton.setActionCommand("customer");
+		customerButton.addActionListener(new ButtonListener());
+
+		
+	    //Add buttons to panel
+		panel = new JPanel();
+		panel.add(managerButton);
+		panel.add(customerButton);
 	    
 	}
 	
-	/**
-	 * Creates vertical menu associated with Views
-	 * menu item on the menu bar.
-	 */
-	
-	public void createViews() {
-		
-	}
-	
-	/**
-	 * Creates the look and feel submenu.
-	 */
-	
-	public void createLookAndFeel() {
-		
-	}
-	
-	/**
-	 * Creates the scroll bars submenu.
-	 */
-	
-	public void createScrollBars() {
-		
-	}
-	
-	/**
-	 * Private inner class that handles the Menu object's
-	 * action events.
-	 */
-	
-	private class MenuListener implements ActionListener
+	private class ButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
 			
-			String actionCommand = e.getActionCommand();
-			if (actionCommand.equals("Save Note 1"))
-				note1 = theText.getText();
-			else if (actionCommand.equals("Save Note 2"))
-				note2 = theText.getText();
-	        else if (actionCommand.equals("Clear"))
-	        	theText.setText("");
-	        else if (actionCommand.equals("Open Note 1"))
-	        	theText.setText(note1);
-	        else if (actionCommand.equals("Open Note 2"))
-	        	theText.setText(note2);
-	        else if (actionCommand.equals("Exit"))
-	        	System.exit(0);
-	        // ADD 6 BRANCHES TO THE ELSE-IF STRUCTURE
-	        // TO ALLOW ACTION TO BE PERFORMED FOR EACH
-	        // MENU ITEM YOU HAVE CREATED
-	        else
-	        	theText.setText("Error in memo interface");
-			
 		}
-		
 	}
+
 	
 	/**
-	 * The main method creates an instance of the
-	 * NoteTaker class which causes it to display its window.
+	 * main method
 	 */
 	
-	public static void main(String[] args)
+	public static void main(String[] args) 
 	{
-		
-		NoteTaker gui = new NoteTaker();
-		gui.setVisible(true);
-		
+		new RestaurantWindow();
 	}
+
+}
+
 }
 }
